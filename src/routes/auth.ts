@@ -1,4 +1,6 @@
 import { Request, Response, Router } from 'express';
+import { IRequest } from '../interfaces.ts/request';
+import authMiddleware from '../middleware/auth';
 import Invitation from '../models/invitation';
 import User from '../models/user';
 
@@ -31,6 +33,7 @@ auth.post(`/reg`, async (req: Request, res: Response) => {
 
     const result = await register(_user);
     if (result.error === null) {
+        res.cookie('token', result.token, {httpOnly: true})
         return res.status(201).json(result);
     }
     return res.status(400).json(result);
@@ -39,10 +42,17 @@ auth.post(`/reg`, async (req: Request, res: Response) => {
 auth.post(`/login`, async (req: Request, res: Response) => {
     const result = await login(req.body.email, req.body.password);
     if (result.error === null) {
+        res.cookie('token', result.token, {httpOnly: true})
         return res.status(201).json(result);
     }
     return res.status(400).json(result);
 });
 
+
+auth.get(`/test`, authMiddleware, async (req: IRequest, res: Response) => {
+    return res.status(200).json({
+        "ok": "ok",
+    });
+});
 
 export default auth;

@@ -77,7 +77,6 @@ const login = async (email: string, password: string) => {
     }
 
     const pass = user.rows[0].password;
-    console.log(pass);
 
     const ok = await argon2.verify(pass, password);
     if (!ok) {
