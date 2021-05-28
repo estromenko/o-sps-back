@@ -5,6 +5,7 @@ class Event {
     title?: string;
     text?: string;
     ownerId?: number;
+    speciality?: string;
 };
 
 export default Event;

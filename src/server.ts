@@ -3,13 +3,14 @@ import http from 'http';
 import { Server, Socket } from 'socket.io';
 import cors from 'cors';
 import { serverConfig } from './config/config';
-import pool from './database/database';
 import logger from './logger/logger';
 import helmet from 'helmet';
 import compression from 'compression';
 
 import auth from './routes/auth';
 import bodyParser from 'body-parser';
+import events from './routes/events';
+import invitations from './routes/invitations';
 
 require('dotenv').config();
 
@@ -24,7 +25,9 @@ app.disable('x-powered-by');
 app.use(bodyParser());
 
 // Routing
-app.use('/auth', auth)
+app.use('/auth', auth);
+app.use('/events', events);
+app.use('/invitations', invitations)
 
 const server = http.createServer(app);
 const io = new Server(server, {

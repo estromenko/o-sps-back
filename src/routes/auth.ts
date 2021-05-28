@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { IRequest } from '../interfaces.ts/request';
+import { IRequest } from '../interfaces/request';
 import authMiddleware from '../middleware/auth';
 import Invitation from '../models/invitation';
 import User from '../models/user';
@@ -49,10 +49,8 @@ auth.post(`/login`, async (req: Request, res: Response) => {
 });
 
 
-auth.get(`/test`, authMiddleware, async (req: IRequest, res: Response) => {
-    return res.status(200).json({
-        "ok": "ok",
-    });
+auth.get(`/me`, authMiddleware, async (req: IRequest, res: Response) => {
+    return res.status(200).json(req.user);
 });
 
 export default auth;

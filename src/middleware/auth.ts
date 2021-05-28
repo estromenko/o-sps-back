@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import pool from '../database/database';
-import { IRequest } from '../interfaces.ts/request';
+import { IRequest } from '../interfaces/request';
 
 
 const authMiddleware = async (req: IRequest, res: Response, next: NextFunction) => {
+    // const token = req.cookies.token;
     const token = req.headers.authorization;
 
     const secret = process.env.JWT_SECRET;
@@ -16,7 +17,7 @@ const authMiddleware = async (req: IRequest, res: Response, next: NextFunction) 
 
     try {
         let payload: any;
-        jwt.verify(token!, secret, function(err, decoded) {
+        jwt.verify(token!, secret, function(err: any, decoded: any) {
             if (err !== null) {
                 return null;
             }
