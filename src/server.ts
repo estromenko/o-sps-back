@@ -11,9 +11,10 @@ import auth from './routes/auth';
 import bodyParser from 'body-parser';
 import events from './routes/events';
 import invitations from './routes/invitations';
+import fleamarket from './routes/fleamarket';
+
 
 require('dotenv').config();
-
 
 const app: express.Application = express();
 
@@ -24,10 +25,13 @@ app.use(compression());
 app.disable('x-powered-by');
 app.use(bodyParser());
 
+app.use('/uploads', express.static('./uploads'));
+
 // Routing
 app.use('/auth', auth);
 app.use('/events', events);
 app.use('/invitations', invitations)
+app.use('/fleamarket', fleamarket);
 
 const server = http.createServer(app);
 const io = new Server(server, {
