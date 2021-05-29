@@ -1,10 +1,10 @@
 
 
 class FleamarketPost {
-    id?: number;
+    id?: string;
     title?: string;
     text?: string;
-    ownerId?: number;
+    ownerId?: string;
     image?: string;
     type?: string;
 };

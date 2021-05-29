@@ -19,7 +19,7 @@ auth.post(`/reg`, async (req: Request, res: Response) => {
     
     const _user: User = {
         email: invitation.email,
-        dormId: parseInt(req.body.dormId),
+        dormId: req.body.dormId,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         password: req.body.password,
@@ -34,16 +34,20 @@ auth.post(`/reg`, async (req: Request, res: Response) => {
     const result = await register(_user);
     if (result.error === null) {
         res.cookie('token', result.token, {httpOnly: true})
+
+        delete result.user.password;
         const data = {
             'user': result.user,
             'error': result.error,
         }
         return res.status(201).json(data);
     }
+    
     const data = {
-        'user': result.user,
-        'error': result.error,
+        user: result.user,
+        error: result.error,
     }
+
     return res.status(400).json(data);
 });
 
@@ -51,7 +55,7 @@ auth.post(`/login`, async (req: Request, res: Response) => {
     let result = await login(req.body.email, req.body.password);
     if (result.error === null) {
         res.cookie('token', result.token, {httpOnly: true})
-
+        delete result.user.password;
         const data = {
             'user': result.user,
             'error': result.error,

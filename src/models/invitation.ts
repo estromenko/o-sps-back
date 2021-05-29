@@ -1,7 +1,7 @@
 
 
 class Invitation {
-    id?: number;
+    id?: string;
     email?: string;
 };
 

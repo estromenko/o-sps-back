@@ -3,7 +3,7 @@ import User from "../models/user";
 import pool from "../database/database";
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-
+import { v4 as uuidv4 } from 'uuid';
 const ajv = new Ajv();
 
 require('dotenv').config();
@@ -43,9 +43,9 @@ const register = async (user: User) => {
 
     const id = await pool.query(`
         INSERT INTO users 
-        (email, first_name, last_name, password, dorm_id, room_number)
-        VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;
-    `, [user.email, user.firstName, user.lastName, user.password, user.dormId || null, user.roomNumber || null]);
+        (id, email, first_name, last_name, password, dorm_id, room_number)
+        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id;
+    `, [uuidv4(), user.email, user.firstName, user.lastName, user.password, user.dormId || null, user.roomNumber || null]);
 
     if (id.rows.length < 1) {
         return {

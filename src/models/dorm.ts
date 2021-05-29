@@ -1,6 +1,6 @@
 
 class Dorm {
-    id?: number;
+    id?: string;
     address?: string;
     name?: string;
 };

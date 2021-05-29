@@ -58,7 +58,7 @@ io.on("connection", async (socket: Socket) => {
     socket.on('increment likes', await increaseLikes(socket));
     socket.on('decrement likes', await decreaseLikes(socket));
     socket.on('warning', (data: any) => {
-        socket.emit('warging', data);
+        socket.emit('warging', data);   
     });
 });
 

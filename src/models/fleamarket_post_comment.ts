@@ -1,8 +1,8 @@
 
 class FleamarketPostComment {
-    id?: number;
-    postId?: number;
-    ownerId?: number;
+    id?: string;
+    postId?: string;
+    ownerId?: string;
     text?: string;
     isAnominous?: boolean;
 };

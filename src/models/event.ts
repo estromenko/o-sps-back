@@ -1,10 +1,10 @@
 
 
 class Event {
-    id?: number;
+    id?: string;
     title?: string;
     text?: string;
-    ownerId?: number;
+    ownerId?: string;
     speciality?: string;
 };
 

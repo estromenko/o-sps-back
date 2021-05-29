@@ -1,9 +1,9 @@
 
 
 class Comment {
-    id?: number;
-    ownerId?: number;
-    eventId?: number;
+    id?: string;
+    ownerId?: string;
+    eventId?: string;
     text?: string;
 };
 

@@ -1,7 +1,7 @@
 # o-sps-back
 
 ~~~~ 
-/auth/reg POST (invitationId: int, firstName: string, lastName: string, password: string, dormId: int, roomNumber: int) => ( token, user, error )
+/auth/reg POST (invitationId: string, firstName: string, lastName: string, password: string, dormId: string, roomNumber: int) => ( token, user, error )
 /auth/login POST (email: string, password: string) => (token: string, user: USER, error: string)
 /auth/me GET () => ( USER )
 ~~~~

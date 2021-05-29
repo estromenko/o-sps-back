@@ -4,6 +4,8 @@ import authMiddleware from '../middleware/auth';
 import pool from '../database/database';
 import Event from '../models/event';
 
+import { v4 as uuidv4 } from 'uuid';
+
 const events = Router();
 
 events.get(`/`, authMiddleware, async (req: IRequest, res: Response) => {
@@ -36,8 +38,8 @@ events.get(`/:id/comments`, authMiddleware, async (req: IRequest, res: Response)
 
 events.get(`/:id/comments/create`, authMiddleware, async (req: IRequest, res: Response) => {
     const comments = await pool.query(
-        `INSERT INTO comments (event_id, owner_id, text) VALUES ($1, $2, $3) RETURNING *;`,
-        [ req.params.id, req.user?.id, req.body.text, ],
+        `INSERT INTO comments (id, event_id, owner_id, text) VALUES ($1, $2, $3, $4) RETURNING *;`,
+        [ uuidv4(), req.params.id, req.user?.id, req.body.text, ],
     );
     return res.status(200).json(comments.rows);
 });
@@ -51,8 +53,8 @@ events.post(`/create`, authMiddleware, async (req: IRequest, res: Response) => {
     };
 
     const id = await pool.query(
-        `INSERT INTO events (owner_id, title, text, speciality) VALUES ($1, $2, $3, $4) RETURNING id`, 
-        [ event.ownerId, event.title, event.text, event.speciality ],
+        `INSERT INTO events (id, owner_id, title, text, speciality) VALUES ($1, $2, $3, $4, $5 RETURNING id`, 
+        [ uuidv4(), event.ownerId, event.title, event.text, event.speciality ],
     );
     
     event.id = id.rows[0].id;

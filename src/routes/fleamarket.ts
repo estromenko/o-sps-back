@@ -4,6 +4,7 @@ import { IRequest } from '../interfaces/request';
 import authMiddleware from '../middleware/auth';
 
 import multer from 'multer';
+import { v4 as uuidv4 } from 'uuid';
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -44,9 +45,9 @@ fleamarket.get(`/:id`, authMiddleware, async (req: IRequest, res: Response) => {
 
 fleamarket.post(`/create`, authMiddleware, upload.single('image'), async (req: IRequest, res: Response) => {
     const post = await pool.query(
-        `INSERT INTO fleamarket_posts (title, text, owner_id, image, type) 
-        VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
-        [ req.body.title, req.body.text, req.user?.id, req.file.path, req.body.type, ],
+        `INSERT INTO fleamarket_posts (id, title, text, owner_id, image, type) 
+        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
+        [ uuidv4(), req.body.title, req.body.text, req.user?.id, req.file.path, req.body.type, ],
     );
 
     if (post.rows.length < 1) {

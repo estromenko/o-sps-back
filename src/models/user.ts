@@ -1,11 +1,11 @@
 
 class User {
-    id?: number;
+    id?: string;
     email?: string;
     firstName?: string;
     lastName?: string;
     password?: string;
-    dormId?: number;
+    dormId?: string;
     roomNumber?: number;
     isAdmin?: boolean;
 };

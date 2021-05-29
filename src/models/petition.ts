@@ -1,8 +1,8 @@
 
 
 class Petition {
-    id?: number;
-    ownerId?: number;
+    id?: string;
+    ownerId?: string;
     title?: string;
     text?: string;
     likes?: number;

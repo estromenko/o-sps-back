@@ -1,7 +1,7 @@
 
 
 class BathQueue {
-    userId?: number;
+    userId?: string;
     startTime?: Date;
 };
 

@@ -4,7 +4,7 @@ import authMiddleware from "../middleware/auth";
 import { Router, Response } from 'express';
 import pool from "../database/database";
 import Petition from "../models/petition";
-
+import { v4 as uuidv4 } from 'uuid';
 const petitions = Router();
 
 petitions.get(`/`, authMiddleware, async (req: IRequest, res: Response) => {
@@ -23,10 +23,10 @@ petitions.post(`/create`, authMiddleware, async (req: IRequest, res: Response) =
 
     const id = await pool.query(
         `INSERT INTO petitions
-        (owner_id, title, text, likes, dislikes)
+        (id, owner_id, title, text, likes, dislikes)
         VALUES
-        ($1, $2, $3, $4, $5) RETURNING id`,
-        [ petition.ownerId, petition.title, petition.text, 0, 0 ]
+        ($1, $2, $3, $4, $5, $6) RETURNING id`,
+        [ uuidv4(), petition.ownerId, petition.title, petition.text, 0, 0 ]
     );
 
     if (id.rows.length < 1) {
