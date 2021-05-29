@@ -36,7 +36,31 @@ const newEventComment = (socket: Socket) => {
     }
 }
 
+const increaseLikes = (socket: Socket) => {
+    return async (data: any) => {
+        const likes = await pool.query(`UPDATE petitions SET likes = likes + 1 WHERE id=$1 RETURNING likes`, 
+        [ data.id, ]);
+
+        socket.to(socket.id).emit('increase likes', {
+            likes: likes.rows[0].likes,
+        });
+    }
+}
+
+const decreaseLikes = (socket: Socket) => {
+    return async (data: any) => {
+        const likes = await pool.query(`UPDATE petitions SET likes = likes - 1 WHERE id=$1 RETURNING likes`, 
+        [ data.id, ]);
+
+        socket.to(socket.id).emit('decrease likes', {
+            likes: likes.rows[0].likes,
+        });
+    }
+}
+
 export {
     newFleamarketComment,
     newEventComment,
+    increaseLikes,
+    decreaseLikes,
 }

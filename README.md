@@ -23,3 +23,9 @@
 /fleamarket/:id GET () => ( FLEAMARKET_POST )
 /fleamarket/create POST (image: string, title: string, text: string, type: string) => ( FLEAMARKET_POST )
 ~~~~
+
+~~~~
+/petitions/ GET () => ( [PETITION] )
+/petitions/:id GET () => ( PETITION )
+/petitions/create POST (title: string, text: string) => ( PETITION )
+~~~~

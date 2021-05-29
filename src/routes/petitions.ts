@@ -39,3 +39,16 @@ petitions.post(`/create`, authMiddleware, async (req: IRequest, res: Response) =
 
     return res.status(201).json(petition)
 });
+
+petitions.get(`/:id`, authMiddleware, async (req: IRequest, res: Response) => {
+    const _petitions = await pool.query(`SELECT * FROM petitions WHERE id = $1`, [ req.params.id ]);
+    if (_petitions.rows.length < 1) {
+        return res.status(404).json({
+            error: 'not found',
+        });
+    }
+    return res.status(200).json(_petitions.rows[0]);
+}); 
+
+
+export default petitions;

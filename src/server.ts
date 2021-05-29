@@ -12,8 +12,9 @@ import bodyParser from 'body-parser';
 import events from './routes/events';
 import invitations from './routes/invitations';
 import fleamarket from './routes/fleamarket';
+import petitions from './routes/petitions';
 import loggingMiddleware from './middleware/logging';
-import { newEventComment, newFleamarketComment } from './sockets/sockets';
+import { increaseLikes, decreaseLikes, newEventComment, newFleamarketComment } from './sockets/sockets';
 
 
 require('dotenv').config();
@@ -36,6 +37,7 @@ app.use('/auth', auth);
 app.use('/events', events);
 app.use('/invitations', invitations)
 app.use('/fleamarket', fleamarket);
+app.use('/petitions', petitions);
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -45,6 +47,8 @@ const io = new Server(server, {
 io.on("connection", async (socket: Socket) => {
     socket.on('new fleamarket comment', await newFleamarketComment(socket));
     socket.on('new event comment', await newEventComment(socket));
+    socket.on('increment likes', await increaseLikes(socket));
+    socket.on('decrement likes', await decreaseLikes(socket));
     socket.on('warning', (data: any) => {
         socket.emit('warging', data);
     });
