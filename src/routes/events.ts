@@ -37,7 +37,7 @@ events.get(`/:id/comments`, authMiddleware, async (req: IRequest, res: Response)
 events.get(`/:id/comments/create`, authMiddleware, async (req: IRequest, res: Response) => {
     const comments = await pool.query(
         `INSERT INTO comments (event_id, owner_id, text) VALUES ($1, $2, $3) RETURNING *;`,
-        [ req.params.id, req.user?.id, req.body.text ],
+        [ req.params.id, req.user?.id, req.body.text, ],
     );
     return res.status(200).json(comments.rows);
 });
