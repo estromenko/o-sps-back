@@ -7,6 +7,7 @@ class User {
     password?: string;
     dormId?: number;
     roomNumber?: number;
+    isAdmin?: boolean;
 };
 
 export default User;

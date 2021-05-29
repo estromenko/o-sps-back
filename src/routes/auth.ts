@@ -34,22 +34,42 @@ auth.post(`/reg`, async (req: Request, res: Response) => {
     const result = await register(_user);
     if (result.error === null) {
         res.cookie('token', result.token, {httpOnly: true})
-        return res.status(201).json(result);
+        const data = {
+            'user': result.user,
+            'error': result.error,
+        }
+        return res.status(201).json(data);
     }
-    return res.status(400).json(result);
+    const data = {
+        'user': result.user,
+        'error': result.error,
+    }
+    return res.status(400).json(data);
 });
 
 auth.post(`/login`, async (req: Request, res: Response) => {
-    const result = await login(req.body.email, req.body.password);
+    let result = await login(req.body.email, req.body.password);
     if (result.error === null) {
         res.cookie('token', result.token, {httpOnly: true})
-        return res.status(201).json(result);
+
+        const data = {
+            'user': result.user,
+            'error': result.error,
+        }
+        return res.status(201).json(data);
     }
-    return res.status(400).json(result);
+
+    const data = {
+        'user': result.user,
+        'error': result.error,
+    }
+
+    return res.status(400).json(data);
 });
 
 
 auth.get(`/me`, authMiddleware, async (req: IRequest, res: Response) => {
+    delete req.user?.password;
     return res.status(200).json(req.user);
 });
 

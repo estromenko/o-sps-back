@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS users (
     last_name VARCHAR(100) NOT NULL,
     password VARCHAR(255) NOT NULL,
     dorm_id int REFERENCES dorms(id),
-    room_number int
+    room_number int,
+    is_admin BOOLEAN DEFAULT FALSE NOT NULL
 );

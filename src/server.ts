@@ -15,7 +15,13 @@ import fleamarket from './routes/fleamarket';
 import petitions from './routes/petitions';
 import loggingMiddleware from './middleware/logging';
 import { increaseLikes, decreaseLikes, newEventComment, newFleamarketComment } from './sockets/sockets';
+import admin from './routes/admin';
+import bath from './routes/bath';
+import cookieParser from 'cookie-parser';
 
+import migrate from './utils/migrate';
+
+// migrate();
 
 require('dotenv').config();
 
@@ -27,10 +33,10 @@ app.use(helmet());
 app.use(compression());
 app.disable('x-powered-by');
 app.use(bodyParser());
+app.use(cookieParser());
 app.use(loggingMiddleware);
 
 app.use('/uploads', express.static('./uploads'));
-
 
 // Routing
 app.use('/auth', auth);
@@ -38,6 +44,8 @@ app.use('/events', events);
 app.use('/invitations', invitations)
 app.use('/fleamarket', fleamarket);
 app.use('/petitions', petitions);
+app.use('/admin', admin);
+app.use('/bath', bath);
 
 const server = http.createServer(app);
 const io = new Server(server, {

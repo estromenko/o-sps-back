@@ -1,12 +1,18 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import pool from '../database/database';
 import { IRequest } from '../interfaces/request';
 
 
 const authMiddleware = async (req: IRequest, res: Response, next: NextFunction) => {
-    // const token = req.cookies.token;
-    const token = req.headers.authorization;
+    const token = req.cookies.token;
+    // const token = req.headers.authorization;
+
+    if (token === undefined) {
+        return res.status(403).json({
+            error: 'Not authorized',    
+        });
+    }
 
     const secret = process.env.JWT_SECRET;
     if (secret === undefined) {
