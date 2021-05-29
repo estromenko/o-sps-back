@@ -12,6 +12,8 @@ import bodyParser from 'body-parser';
 import events from './routes/events';
 import invitations from './routes/invitations';
 import fleamarket from './routes/fleamarket';
+import loggingMiddleware from './middleware/logging';
+import { newEventComment, newFleamarketComment } from './sockets/sockets';
 
 
 require('dotenv').config();
@@ -24,8 +26,10 @@ app.use(helmet());
 app.use(compression());
 app.disable('x-powered-by');
 app.use(bodyParser());
+app.use(loggingMiddleware);
 
 app.use('/uploads', express.static('./uploads'));
+
 
 // Routing
 app.use('/auth', auth);
@@ -37,6 +41,14 @@ const server = http.createServer(app);
 const io = new Server(server, {
     cors: {origin: [`http://localhost:${serverConfig.port}`]},
 }); 
+
+io.on("connection", async (socket: Socket) => {
+    socket.on('new fleamarket comment', await newFleamarketComment(socket));
+    socket.on('new event comment', await newEventComment(socket));
+    socket.on('warning', (data: any) => {
+        socket.emit('warging', data);
+    });
+});
 
 server.listen(serverConfig.port, () => {
     logger.info(`Server started at localhost:${serverConfig.port}`);
