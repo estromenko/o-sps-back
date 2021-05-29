@@ -1,0 +1,20 @@
+{
+    "info": {    
+        "title": "o-sps-api",
+        "description": "o-sps REST API",
+        "version": "1.0.0"
+    },
+    "openapi": "3.0.0",
+    "paths": {  
+        "/auth/reg": {
+            "post": {
+                "summary": "User registration",
+                "responses": {
+                    "description": "Returns error, user, and token in cookies"
+                }
+            },
+            "parameters": {},
+            "description": "asd"
+        }
+    }
+}

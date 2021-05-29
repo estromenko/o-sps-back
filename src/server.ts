@@ -18,6 +18,9 @@ import { increaseLikes, decreaseLikes, newEventComment, newFleamarketComment } f
 import admin from './routes/admin';
 import bath from './routes/bath';
 import cookieParser from 'cookie-parser';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../docs/swagger.json';
+
 
 import migrate from './utils/migrate';
 
@@ -34,11 +37,14 @@ app.use(compression());
 app.disable('x-powered-by');
 app.use(bodyParser());
 app.use(cookieParser());
+app.use('/uploads', express.static('./uploads'));
+app.use('/docs', swaggerUi.serve);
+
 app.use(loggingMiddleware);
 
-app.use('/uploads', express.static('./uploads'));
 
 // Routing
+app.get('/docs', swaggerUi.setup(swaggerDocument));
 app.use('/auth', auth);
 app.use('/events', events);
 app.use('/invitations', invitations)
@@ -58,6 +64,7 @@ io.on("connection", async (socket: Socket) => {
     socket.on('increment likes', await increaseLikes(socket));
     socket.on('decrement likes', await decreaseLikes(socket));
     socket.on('warning', (data: any) => {
+        console.log(data);
         socket.emit('warging', data);   
     });
 });

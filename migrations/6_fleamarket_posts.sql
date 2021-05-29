@@ -4,5 +4,6 @@ CREATE TABLE IF NOT EXISTS fleamarket_posts (
     text TEXT NOT NULL,
     title VARCHAR(255) NOT NULL,
     type VARCHAR(255) NOT NULL,
-    image VARCHAR(255)
+    image VARCHAR(255),
+    date TIMESTAMP NOT NULL
 );

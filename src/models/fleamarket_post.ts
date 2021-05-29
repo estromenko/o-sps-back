@@ -7,4 +7,5 @@ class FleamarketPost {
     ownerId?: string;
     image?: string;
     type?: string;
+    date?: Date;
 };

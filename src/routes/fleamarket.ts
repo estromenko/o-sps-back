@@ -45,9 +45,9 @@ fleamarket.get(`/:id`, authMiddleware, async (req: IRequest, res: Response) => {
 
 fleamarket.post(`/create`, authMiddleware, upload.single('image'), async (req: IRequest, res: Response) => {
     const post = await pool.query(
-        `INSERT INTO fleamarket_posts (id, title, text, owner_id, image, type) 
-        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
-        [ uuidv4(), req.body.title, req.body.text, req.user?.id, req.file.path, req.body.type, ],
+        `INSERT INTO fleamarket_posts (id, title, text, owner_id, image, type, date) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
+        [ uuidv4(), req.body.title, req.body.text, req.user?.id, req.file.path, req.body.type, new Date().toISOString() ],
     );
 
     if (post.rows.length < 1) {
