@@ -7,9 +7,26 @@ import User from '../models/user';
 import { getInvitationById } from '../repository/invitation';
 import { register, validate, login } from '../services/user';
 
+
+import multer from 'multer';
+import { v4 as uuidv4 } from 'uuid';
+
+const storageConfig = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/");
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({storage: storageConfig});
+
+
+
 const auth = Router();
 
-auth.post(`/reg`, async (req: Request, res: Response) => { 
+auth.post(`/reg`, upload.single('image'), async (req: Request, res: Response) => { 
     const invitation: Invitation = await getInvitationById(req.body.invitationId);
     if (invitation == null) {
         return res.status(400).json({
@@ -24,6 +41,7 @@ auth.post(`/reg`, async (req: Request, res: Response) => {
         lastName: req.body.lastName,
         password: req.body.password,
         roomNumber: parseInt(req.body.roomNumber),
+        image: req.file?.path || 'default.jpeg',
     };
 
     const errors = validate(_user);
@@ -77,4 +95,12 @@ auth.get(`/me`, authMiddleware, async (req: IRequest, res: Response) => {
     return res.status(200).json(req.user);
 });
 
+auth.post(`/logout`, authMiddleware, async (req: IRequest, res: Response) => {
+    delete req.cookies.token;
+    return res.status(200).json({
+        success: 'successfully deleted',
+    });
+});
+
 export default auth;
+

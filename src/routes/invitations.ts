@@ -3,6 +3,8 @@ import pool from '../database/database';
 import { IRequest } from '../interfaces/request';
 import authMiddleware from '../middleware/auth';
 import { v4 as uuidv4 } from 'uuid';
+import transporter from '../email/email';
+
 const invitations = Router();
 
 
@@ -16,6 +18,14 @@ invitations.post(`/create`, authMiddleware, async (req: IRequest, res: Response)
 
     const invitation = await pool.query(`INSERT INTO invitations (id, email) VALUES ($1, $2) RETURNING *;`, 
     [ uuidv4(), req.body.email ]);
+
+    // const result = await transporter.sendMail({
+    //     from: 'CWuS',
+    //     subject: 'Invitation',
+    //     to: invitation.rows[0].email,
+    //     text: "Invitation",
+    // });
+
     return res.status(201).json(invitation.rows[0]);
 });
 

@@ -35,8 +35,8 @@ const authMiddleware = async (req: IRequest, res: Response, next: NextFunction) 
                 error: 'Wrong token decoding',
             });
         }
-           
-        const user = await pool.query(`SELECT * FROM users WHERE id=$1`, [ payload.id ])
+        
+        const user = await pool.query(`SELECT * FROM users WHERE id = $1`, [ payload.id ])
 
         if (user.rows.length < 1) {
             throw new Error('Invalid token')
