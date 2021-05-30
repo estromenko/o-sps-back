@@ -43,6 +43,10 @@ fleamarket.get(`/:id`, authMiddleware, async (req: IRequest, res: Response) => {
     return res.status(200).json(post.rows);
 });
 
+fleamarket.get(`/:id/comments`, authMiddleware, async (req: IRequest, res: Response) => {
+    
+});
+
 fleamarket.post(`/create`, authMiddleware, upload.single('image'), async (req: IRequest, res: Response) => {
     const post = await pool.query(
         `INSERT INTO fleamarket_posts (id, title, text, owner_id, image, type, date) 

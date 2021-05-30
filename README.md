@@ -16,6 +16,7 @@
 
 ~~~~
 /invitations/create POST (email: string) => ( INVITATION )
+/invitations/ GET () => ( [INVITATION] )
 ~~~~
 
 ~~~~
@@ -27,5 +28,6 @@
 ~~~~
 /petitions/ GET () => ( [PETITION] )
 /petitions/:id GET () => ( PETITION )
+/petitions/:id/mark POST (type: string) => ( PETITION )
 /petitions/create POST (title: string, text: string) => ( PETITION )
 ~~~~

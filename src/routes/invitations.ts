@@ -19,5 +19,10 @@ invitations.post(`/create`, authMiddleware, async (req: IRequest, res: Response)
     return res.status(201).json(invitation.rows[0]);
 });
 
+invitations.get(`/`, authMiddleware, async (req: IRequest, res: Response) => {
+    const invites = await pool.query(`SELECT * FROM invitations;`);
+    return res.status(200).json(invites.rows);
+});
+
 
 export default invitations;

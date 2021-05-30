@@ -14,7 +14,7 @@ import invitations from './routes/invitations';
 import fleamarket from './routes/fleamarket';
 import petitions from './routes/petitions';
 import loggingMiddleware from './middleware/logging';
-import { increaseLikes, decreaseLikes, newEventComment, newFleamarketComment } from './sockets/sockets';
+import { newEventComment, newFleamarketComment } from './sockets/sockets';
 import admin from './routes/admin';
 import bath from './routes/bath';
 import cookieParser from 'cookie-parser';
@@ -31,7 +31,7 @@ require('dotenv').config();
 const app: express.Application = express();
 
 // Middleware
-app.use(cors({}))
+app.use(cors({origin: `*`}));
 app.use(helmet());
 app.use(compression());
 app.disable('x-powered-by');
@@ -55,17 +55,14 @@ app.use('/bath', bath);
 
 const server = http.createServer(app);
 const io = new Server(server, {
-    cors: {origin: [`http://localhost:${serverConfig.port}`]},
+    cors: {origin: `*`},
 }); 
 
 io.on("connection", async (socket: Socket) => {
     socket.on('new fleamarket comment', await newFleamarketComment(socket));
     socket.on('new event comment', await newEventComment(socket));
-    socket.on('increment likes', await increaseLikes(socket));
-    socket.on('decrement likes', await decreaseLikes(socket));
     socket.on('warning', (data: any) => {
-        console.log(data);
-        socket.emit('warging', data);   
+        socket.broadcast.emit('on warning', data);   
     });
 });
 

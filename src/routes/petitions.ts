@@ -40,6 +40,8 @@ petitions.post(`/create`, authMiddleware, async (req: IRequest, res: Response) =
     return res.status(201).json(petition)
 });
 
+petitions.get(`/:id/comments`, authMiddleware, async (req: IRequest, res: Response) => {});
+
 petitions.get(`/:id`, authMiddleware, async (req: IRequest, res: Response) => {
     const _petitions = await pool.query(`SELECT * FROM petitions WHERE id = $1`, [ req.params.id ]);
     if (_petitions.rows.length < 1) {
@@ -50,5 +52,32 @@ petitions.get(`/:id`, authMiddleware, async (req: IRequest, res: Response) => {
     return res.status(200).json(_petitions.rows[0]);
 }); 
 
+petitions.post(`/:id/mark`, authMiddleware, async (req: IRequest, res: Response) => {
+    const _petitions = await pool.query(`SELECT * FROM petitions WHERE id = $1`, [ req.params.id ]);
+    if (_petitions.rows.length < 1) {
+        return res.status(404).json({
+            error: 'not found',
+        });
+    }
+
+    let marked;
+    if (req.body.type === 'like') {
+        marked = await pool.query(
+            `UPDATE petitions SET likes = likes + 1 WHERE id = $1`,
+            [ req.params.id, ]
+        );
+    } else if (req.body.type === 'dislike') {
+        marked = await pool.query(
+            `UPDATE petitions SET likes = dislikes + 1 WHERE id = $1`,
+            [ req.params.id, ]
+        );
+    } else {
+        return res.status(400).json({
+            error: 'invalid field',
+        });
+    }
+
+    return res.status(200).json(marked.rows[0]);
+});
 
 export default petitions;
