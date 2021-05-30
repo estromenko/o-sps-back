@@ -106,9 +106,14 @@ const createToken = (payload: any) => {
     return token;
 }
 
+const compare = async (hash: string, pass: string) => {
+    return await argon2.verify(hash, pass);
+}
+
 export {
     validate,
     register,
     createToken,
     login,
+    compare,
 };

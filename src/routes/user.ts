@@ -2,11 +2,13 @@ import { Router, Response } from 'express';
 import { IRequest } from '../interfaces/request';
 import authMiddleware from '../middleware/auth';
 import pool from '../database/database';
+import argon2 from 'argon2';
 
 
 import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import User from '../models/user';
+import { compare } from '../services/user';
 
 const storageConfig = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -48,6 +50,16 @@ user.put(`/edit`, authMiddleware, upload.single('image'), async (req: IRequest, 
             error: e,
         });
     }
+});
+
+user.put(`/pass`, authMiddleware, async (req: IRequest, res: Response) => {
+    const pass = req.body.password;
+    const hash = await argon2.hash(pass);
+
+    const result = await pool.query(`UPDATE users SET password = $1 WHERE id = $2`, [ hash, req.user?.id ]);
+    return res.status(200).json({
+        success: 'password changed successfully',
+    });
 });
 
 export default user;

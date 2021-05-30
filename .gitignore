@@ -2,7 +2,7 @@
 /node_modules
 
 /uploads/*
-!/uploads/.gitkeep
+!/uploads/default.jpeg
 
 .env
 *.log
