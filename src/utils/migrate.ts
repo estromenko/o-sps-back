@@ -9,10 +9,11 @@ const migrate = () => {
             logger.error('error: ' + err);
             return;
         }
-        files.forEach(async (value, index) => {
-            logger.info(index)
-            const query = await pool.query(value);
-            logger.info(index + ' done.');
+        files.forEach((value, index) => {
+            fs.readFile('./migrations/' + value, 'utf-8', (err: any, data: any) => {
+                logger.info('\t' + value + '...');
+                pool.query(data);
+            });
         });
     });
 }

@@ -24,7 +24,7 @@ import swaggerDocument from '../docs/swagger.json';
 
 import migrate from './utils/migrate';
 
-// migrate();
+migrate();
 
 require('dotenv').config();
 
